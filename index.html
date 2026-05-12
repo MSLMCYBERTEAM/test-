@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MO AI - MCT Systems</title>
+    <style>
+        :root {
+            --iron-blue: #00d2ff;
+            --iron-dark: #050a10;
+            --iron-glow: rgba(0, 210, 255, 0.5);
+        }
+
+        body {
+            background-color: var(--iron-dark);
+            color: var(--iron-blue);
+            font-family: 'Segoe UI', Orbitron, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Jarvis HUD Background */
+        .background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 20%, var(--iron-dark) 80%);
+            z-index: -1;
+        }
+
+        /* Arc Reactor Visualizer */
+        .reactor-container {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 2px solid var(--iron-blue);
+            box-shadow: 0 0 20px var(--iron-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 20px var(--iron-glow); }
+            50% { transform: scale(1.05); box-shadow: 0 0 40px var(--iron-blue); }
+            100% { transform: scale(1); box-shadow: 0 0 20px var(--iron-glow); }
+        }
+
+        .core {
+            width: 60px;
+            height: 60px;
+            background: var(--iron-blue);
+            border-radius: 50%;
+            box-shadow: 0 0 30px white;
+        }
+
+        /* Console Area */
+        #display {
+            width: 80%;
+            max-width: 600px;
+            height: 120px;
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px var(--iron-blue);
+            overflow-y: auto;
+        }
+
+        /* Input Controls */
+        .controls {
+            display: flex;
+            gap: 10px;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        input[type="text"] {
+            flex-grow: 1;
+            background: rgba(0, 210, 255, 0.1);
+            border: 1px solid var(--iron-blue);
+            color: var(--iron-blue);
+            padding: 15px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        button {
+            background: transparent;
+            border: 1px solid var(--iron-blue);
+            color: var(--iron-blue);
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: var(--iron-blue);
+            color: black;
+        }
+
+        .status {
+            font-size: 0.7rem;
+            margin-top: 10px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-overlay"></div>
+
+    <div class="reactor-container">
+        <div class="core"></div>
+    </div>
+
+    <h1>MO AI</h1>
+    <div id="display">Systems Online. Awaiting Command, Sir...</div>
+
+    <div class="controls">
+        <input type="text" id="textInput" placeholder="Type a command for Mo...">
+        <button onclick="handleTextInput()">SEND</button>
+        <button id="micBtn">MIC</button>
+    </div>
+
+    <div class="status">V3.0 | MCT ENGINE | AUTHORIZED ACCESS: RADUAN ISLAM NAIM</div>
+
+    <script>
+        const display = document.getElementById('display');
+        const textInput = document.getElementById('textInput');
+        const micBtn = document.getElementById('micBtn');
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.lang = 'en-US';
+
+        // --- ENHANCED ENGINE ---
+        function moEngine(command) {
+            const input = command.toLowerCase();
+            let response = "";
+
+            // 1. Identity & Creator
+            if (input.includes("who are you") || input.includes("your name") || input.includes("identify")) {
+                response = "I am MO, your humble AI companion, integrated with MCT systems.";
+            } 
+            else if (input.includes("creator") || input.includes("created you") || input.includes("founder") || input.includes("naim") || input.includes("raduan")) {
+                response = "I was developed by Raduan Islam Naim, the founder of MCT. He is my architect and primary user.";
+            }
+
+            // 2. Greetings & Politeness
+            else if (input.includes("how are you") || input.includes("status")) {
+                response = "I am functioning within normal parameters, Sir. Thank you for asking. How are you doing today?";
+            }
+            else if (input.includes("hello") || input.includes("hey") || input.includes("hi mo") || input.includes("wake up")) {
+                response = "Hello Sir. I am at your service. What do you require?";
+            }
+            else if (input.includes("thank you") || input.includes("thanks")) {
+                response = "You are most welcome, Sir. It is my pleasure to assist you.";
+            }
+            else if (input.includes("good morning")) {
+                response = "Good morning, Sir. I hope you have a productive day ahead.";
+            }
+            else if (input.includes("good night")) {
+                response = "Good night, Sir. Systems will remain in standby mode until you return.";
+            }
+
+            // 3. Utility Commands
+            else if (input.includes("time") || input.includes("clock")) {
+                response = "The current time is " + new Date().toLocaleTimeString();
+            }
+            else if (input.includes("date") || input.includes("today")) {
+                response = "Today is " + new Date().toDateString();
+            }
+            else if (input.includes("google") || input.includes("search")) {
+                response = "Accessing global databases through Google now.";
+                window.open("https://www.google.com", "_blank");
+            }
+            else if (input.includes("youtube") || input.includes("video") || input.includes("play")) {
+                response = "Initializing YouTube media interface.";
+                window.open("https://www.youtube.com", "_blank");
+            }
+            else if (input.includes("facebook") || input.includes("social")) {
+                response = "Opening Facebook. Connecting to social network.";
+                window.open("https://www.facebook.com", "_blank");
+            }
+
+            // 4. System Control
+            else if (input.includes("shutdown") || input.includes("stop") || input.includes("sleep") || input.includes("exit")) {
+                response = "Understood. Powering down user interface. Goodbye, Sir.";
+                setTimeout(() => { document.body.style.opacity = "0.05"; }, 1500);
+            }
+            else if (input.includes("clear") || input.includes("reset")) {
+                response = "Clearing terminal history.";
+                display.innerHTML = "Systems Refreshed. Awaiting Command...";
+                return;
+            }
+
+            // 5. Fallback
+            else {
+                response = "I apologize, Sir. My current MCT logic doesn't cover that specific command. Shall I search the web for you?";
+            }
+
+            updateUI(command, response);
+            speak(response);
+        }
+
+        // --- UI & SPEECH ---
+        function updateUI(userSaid, moReplied) {
+            display.innerHTML = `<span style="color:#ffffff; font-size: 0.9rem;">>> USER: ${userSaid}</span><br><span style="color:var(--iron-blue)">>> MO: ${moReplied}</span>`;
+        }
+
+        function speak(text) {
+            window.speechSynthesis.cancel(); // Stop current speech before starting new
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 1.0;
+            utterance.pitch = 0.85; // Slightly deeper tone
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // --- EVENT HANDLERS ---
+        function handleTextInput() {
+            const val = textInput.value;
+            if(val.trim() !== "") {
+                moEngine(val);
+                textInput.value = "";
+            }
+        }
+
+        textInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") handleTextInput();
+        });
+
+        micBtn.addEventListener('click', () => {
+            recognition.start();
+            display.innerText = "Listening to voice input...";
+        });
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            moEngine(transcript);
+        };
+
+        recognition.onerror = () => {
+            display.innerText = "Voice recognition error. Check microphone.";
+        };
+    </script>
+</body>
+</html>
